@@ -8,8 +8,13 @@ class ArtistsController < ApplicationController
 
   def destroy
     query_id = params[:id]
-    Artist.destroy(query_id)
-    render json: {"message":"deleted #{query_id}!"}
+    artist = Artist.find_by(id:query_id)
+    if artist
+      artist.destroy
+      render json: {"message":"deleted #{query_id}!"}
+    else
+      render json: {"message":"Artist not found"}
+    end
   end
 
   def index
@@ -19,9 +24,15 @@ class ArtistsController < ApplicationController
 
   def show
     query_id = params[:id]
-    artist = Artist.find(query_id)
-    follower_count = Follower.where(artist_id: query_id).count
-    song_count = Song.where(artist_id: query_id).count
-    render json: { artist:artist, followers: follower_count, song_count: song_count }
+    artist = Artist.find_by(id:query_id)
+    unless artist
+      render json: {"message":"artist not found"}
+    else
+      follower_count = Follower.where(artist_id: query_id).count
+      song_count = Song.where(artist_id: query_id).count
+
+      render json: { artist:artist, followers: follower_count, song_count: song_count }
+    end
+
   end
 end

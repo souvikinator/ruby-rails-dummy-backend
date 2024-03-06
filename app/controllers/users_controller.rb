@@ -2,7 +2,7 @@ class UsersController < ApplicationController
   def create
     username = params[:username]
     bio = params[:bio]
-    new_user = User.create(username: username, bio: bio)
+    new_user = User.create!(username: username, bio: bio)
     render json: new_user
   end
 
