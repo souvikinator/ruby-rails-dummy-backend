@@ -40,3 +40,7 @@ end
 gem 'tzinfo-data', platforms: [:mingw, :mswin, :x64_mingw, :jruby]
 
 gem "grape", "~> 2.0"
+
+gem "redis", "~> 5.1"
+
+gem 'grape-active_model_serializers'

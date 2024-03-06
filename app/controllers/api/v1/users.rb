@@ -10,7 +10,7 @@ module Api::V1
 
         desc "get one user"
         params do
-          requires :id, type: Integer, desc: "ID of the graduate"
+          requires :id, type: Integer, desc: "ID of the user"
         end
         get ":id", root: :user do
           User.where(id: permitted_params[:id]).first!
@@ -18,7 +18,7 @@ module Api::V1
 
         desc "create a user"
         params do
-          requires :username, type: String, desc:"Username of user"
+          requires :username, type: Integer, desc:"Username of user"
         end
         post "", root: :user do
           username = permitted_params[:username]
