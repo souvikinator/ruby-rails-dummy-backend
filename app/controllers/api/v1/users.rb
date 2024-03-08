@@ -1,11 +1,13 @@
 module Api::V1
     class Users < Grape::API
       include Api::V1::Default
+      helpers Api::V1::Helpers::User
 
       resource :user do
         desc "get all users"
         get "", root: :user do
-          User.all
+          users = get_all_users
+          present users
         end
 
         desc "get one user"
@@ -13,16 +15,19 @@ module Api::V1
           requires :id, type: Integer, desc: "ID of the user"
         end
         get ":id", root: :user do
-          User.where(id: permitted_params[:id]).first!
+          id = permitted_params[:id]
+          user = get_user(id)
+          present user
         end
 
         desc "create a user"
         params do
           requires :username, type: Integer, desc:"Username of user"
+          optional :bio, type: String, desc: "Profile bio of the user"
         end
         post "", root: :user do
           username = permitted_params[:username]
-          bio = params[:bio]
+          bio = permitted_params[:bio]
           User.create!(username: username, bio: bio)
         end
 
