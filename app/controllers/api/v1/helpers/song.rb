@@ -1,9 +1,9 @@
-module Api::V1::Helpers::User
+module Api::V1::Helpers::Song
   extend Grape::API::Helpers
 
   def get_all_songs
     songs = Song.all
-    present songs
+    present songs, with: Api::V1::Entities::Song
   end
 
   def get_trending_songs
@@ -11,11 +11,10 @@ module Api::V1::Helpers::User
     if value
       trending_songs = Marshal.load(value)
     else
-      # run query to get top 10 songs with listings in desc
-      # store
-      # return
+      trending_songs = Song.all.order(streams: :desc).limit(10)
+      Rails.cache.write("trending_songs",Marshal.dump(trending_songs))
     end
 
-    present trending_songs
+    present trending_songs, with: Api::V1::Entities::Song
   end
 end
